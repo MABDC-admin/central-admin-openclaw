@@ -1,0 +1,20 @@
+services:
+  command-center-api:
+    build:
+      context: ..
+      dockerfile: deploy/runtime.Dockerfile
+    env_file:
+      - ./command-center.env
+    ports:
+      - "127.0.0.1:18088:8088"
+    restart: unless-stopped
+    command: ["uvicorn", "command_center.main:app", "--host", "0.0.0.0", "--port", "8088"]
+
+  command-center-worker:
+    build:
+      context: ..
+      dockerfile: deploy/runtime.Dockerfile
+    env_file:
+      - ./command-center.env
+    restart: unless-stopped
+    command: ["python", "-m", "command_center.worker"]
