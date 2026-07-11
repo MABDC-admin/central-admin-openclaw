@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Approval</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -16,6 +17,12 @@
         <td><code>{{ command.name }}</code></td>
         <td>{{ command.description }}</td>
         <td>{{ "Required" if command.dangerous else "Not required" }}</td>
+        <td>
+          <form method="post" action="/jobs">
+            <input type="hidden" name="command_name" value="{{ command.name }}">
+            <button type="submit">Run</button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
