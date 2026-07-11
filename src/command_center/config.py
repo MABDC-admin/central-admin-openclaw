@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_base_url: str = "http://127.0.0.1:8088"
     private_access_note: str = "Use Tailscale or ZeroTier only"
 
-    database_url: str
+    database_url: str = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
     telegram_bot_token: str | None = None
     telegram_approval_chat_id: str | None = None
     command_center_secret_dir: str = Field(default="/DATA/docker/command-center/secrets")
