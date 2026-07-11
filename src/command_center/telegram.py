@@ -41,3 +41,19 @@ class TelegramClient:
             response = await client.post(f"{self.base_url}/answerCallbackQuery", json=payload)
             response.raise_for_status()
             return response.json()
+
+    async def get_updates(
+        self,
+        offset: int | None = None,
+        timeout: int = 25,
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "timeout": timeout,
+            "allowed_updates": ["callback_query"],
+        }
+        if offset is not None:
+            payload["offset"] = offset
+        async with httpx.AsyncClient(timeout=timeout + 5) as client:
+            response = await client.post(f"{self.base_url}/getUpdates", json=payload)
+            response.raise_for_status()
+            return response.json()
