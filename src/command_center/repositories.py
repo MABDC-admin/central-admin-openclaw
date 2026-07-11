@@ -65,6 +65,29 @@ class CommandCenterRepository:
             )
         return [dict(row) for row in rows]
 
+    async def claim_next_pending_job(self) -> dict[str, Any] | None:
+        async with self.db.acquire() as conn:
+            row = await conn.fetchrow(
+                """
+                update command_center.jobs
+                set status = $1, updated_at = now()
+                where id = (
+                  select id
+                  from command_center.jobs
+                  where status = $2
+                  order by created_at
+                  for update skip locked
+                  limit 1
+                )
+                returning
+                  id::text, command_name, status, requested_by,
+                  payload, result, error, created_at, updated_at
+                """,
+                JobStatus.RUNNING.value,
+                JobStatus.PENDING.value,
+            )
+        return dict(row) if row else None
+
     async def create_approval(
         self,
         job_id: str,

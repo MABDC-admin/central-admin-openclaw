@@ -56,3 +56,17 @@ td {
   padding: 10px;
   text-align: left;
 }
+
+button {
+  background: #2563eb;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  padding: 8px 12px;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
