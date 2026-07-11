@@ -1,1 +1,58 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  background: #f5f7f9;
+  color: #17202a;
+}
 
+body {
+  margin: 0;
+}
+
+.topbar {
+  align-items: center;
+  background: #1f2933;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+.topbar h1 {
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.topbar p {
+  color: #cbd5df;
+  margin: 0;
+}
+
+.topbar a {
+  color: #ffffff;
+  margin-left: 16px;
+  text-decoration: none;
+}
+
+main {
+  padding: 24px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 10px;
+  text-align: left;
+}

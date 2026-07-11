@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h2>Recent Jobs</h2>
+  {% if jobs %}
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Status</th>
+        <th>Requested By</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr>
+        <td>{{ job.command_name }}</td>
+        <td>{{ job.status }}</td>
+        <td>{{ job.requested_by }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No jobs recorded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
