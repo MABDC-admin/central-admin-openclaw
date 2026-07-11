@@ -88,6 +88,52 @@ class CommandCenterRepository:
             )
         return str(row["id"])
 
+    async def get_approval(self, approval_id: str) -> dict[str, Any] | None:
+        async with self.db.acquire() as conn:
+            row = await conn.fetchrow(
+                """
+                select
+                  id::text, job_id::text, status, action_label,
+                  requested_by, expires_at, decided_by, decided_at, created_at
+                from command_center.approvals
+                where id = $1::uuid
+                """,
+                approval_id,
+            )
+        return dict(row) if row else None
+
+    async def decide_approval(
+        self,
+        approval_id: str,
+        status: ApprovalStatus,
+        decided_by: str,
+    ) -> None:
+        async with self.db.acquire() as conn:
+            await conn.execute(
+                """
+                update command_center.approvals
+                set status = $2, decided_by = $3, decided_at = now()
+                where id = $1::uuid
+                """,
+                approval_id,
+                status.value,
+                decided_by,
+            )
+
+    async def get_job(self, job_id: str) -> dict[str, Any] | None:
+        async with self.db.acquire() as conn:
+            row = await conn.fetchrow(
+                """
+                select
+                  id::text, command_name, status, requested_by,
+                  payload, result, error, created_at, updated_at
+                from command_center.jobs
+                where id = $1::uuid
+                """,
+                job_id,
+            )
+        return dict(row) if row else None
+
     async def write_audit_log(
         self,
         event_type: AuditEventType,
