@@ -6,7 +6,7 @@ services:
     env_file:
       - ./command-center.env
     ports:
-      - "127.0.0.1:18088:8088"
+      - "100.124.32.11:18088:8088"
     networks:
       - supabase_default
     restart: unless-stopped
