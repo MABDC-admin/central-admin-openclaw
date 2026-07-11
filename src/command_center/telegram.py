@@ -30,3 +30,14 @@ class TelegramClient:
             response = await client.post(f"{self.base_url}/sendMessage", json=payload)
             response.raise_for_status()
             return response.json()
+
+    async def answer_callback_query(self, callback_query_id: str, text: str) -> dict[str, Any]:
+        payload = {
+            "callback_query_id": callback_query_id,
+            "text": text,
+            "show_alert": False,
+        }
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.post(f"{self.base_url}/answerCallbackQuery", json=payload)
+            response.raise_for_status()
+            return response.json()
