@@ -2,6 +2,7 @@
 .env.*
 !.env.example
 !deploy/command-center.env.example
+deploy/command-center.env
 .venv/
 __pycache__/
 .pytest_cache/
