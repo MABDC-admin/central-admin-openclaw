@@ -1,8 +1,28 @@
+import json
 from datetime import datetime
 from typing import Any
 
 from command_center.db import Database
 from command_center.models import ApprovalStatus, AuditEventType, JobStatus
+
+
+def _json_dumps(value: dict[str, Any] | None) -> str | None:
+    if value is None:
+        return None
+    return json.dumps(value)
+
+
+def _json_loads(value: Any) -> Any:
+    if isinstance(value, str):
+        return json.loads(value)
+    return value
+
+
+def _decode_json_fields(row: dict[str, Any]) -> dict[str, Any]:
+    for field in ("payload", "result", "details"):
+        if field in row and row[field] is not None:
+            row[field] = _json_loads(row[field])
+    return row
 
 
 class CommandCenterRepository:
@@ -26,7 +46,7 @@ class CommandCenterRepository:
                 command_name,
                 status.value,
                 requested_by,
-                payload,
+                _json_dumps(payload),
             )
         return str(row["id"])
 
@@ -46,7 +66,7 @@ class CommandCenterRepository:
                 """,
                 job_id,
                 status.value,
-                result,
+                _json_dumps(result),
                 error,
             )
 
@@ -63,7 +83,7 @@ class CommandCenterRepository:
                 """,
                 limit,
             )
-        return [dict(row) for row in rows]
+        return [_decode_json_fields(dict(row)) for row in rows]
 
     async def claim_next_pending_job(self) -> dict[str, Any] | None:
         async with self.db.acquire() as conn:
@@ -86,7 +106,7 @@ class CommandCenterRepository:
                 JobStatus.RUNNING.value,
                 JobStatus.PENDING.value,
             )
-        return dict(row) if row else None
+        return _decode_json_fields(dict(row)) if row else None
 
     async def create_approval(
         self,
@@ -123,7 +143,7 @@ class CommandCenterRepository:
                 """,
                 approval_id,
             )
-        return dict(row) if row else None
+        return _decode_json_fields(dict(row)) if row else None
 
     async def decide_approval(
         self,
@@ -155,7 +175,7 @@ class CommandCenterRepository:
                 """,
                 job_id,
             )
-        return dict(row) if row else None
+        return _decode_json_fields(dict(row)) if row else None
 
     async def write_audit_log(
         self,
@@ -174,7 +194,7 @@ class CommandCenterRepository:
                 """,
                 event_type.value,
                 actor,
-                details,
+                _json_dumps(details),
                 job_id,
                 approval_id,
             )
