@@ -1,0 +1,28 @@
+services:
+  command-center-api:
+    build:
+      context: ..
+      dockerfile: deploy/runtime.Dockerfile
+    env_file:
+      - ./command-center.env
+    ports:
+      - "100.124.32.11:18088:8088"
+    networks:
+      - supabase_default
+    restart: unless-stopped
+    command: ["uvicorn", "command_center.main:app", "--host", "0.0.0.0", "--port", "8088"]
+
+  command-center-worker:
+    build:
+      context: ..
+      dockerfile: deploy/runtime.Dockerfile
+    env_file:
+      - ./command-center.env
+    networks:
+      - supabase_default
+    restart: unless-stopped
+    command: ["python", "-m", "command_center.worker"]
+
+networks:
+  supabase_default:
+    external: true

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h2>Command Registry</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Approval</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for command in commands %}
+      <tr>
+        <td><code>{{ command.name }}</code></td>
+        <td>{{ command.description }}</td>
+        <td>{{ "Required" if command.dangerous else "Not required" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
