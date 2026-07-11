@@ -1,8 +1,9 @@
 import os
 import shutil
 import socket
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from command_center.models import CommandDefinition
 
