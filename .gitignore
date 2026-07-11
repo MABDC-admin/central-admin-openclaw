@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+!deploy/command-center.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+dist/
+build/
+htmlcov/
+.coverage
